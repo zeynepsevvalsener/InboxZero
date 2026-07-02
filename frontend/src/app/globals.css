@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette */
+  --color-background: #1d2128;
+  --color-card: #252b33;
+  --color-foreground: #f4f2f2;
+  --color-muted: #9aa3a8;
+  --color-border: #2d4548;
+  --color-primary: #ff9e20;
+  --color-accent: #215e61;
+  --color-success: #215e61;
+  --color-warning: #ff9e20;
+  --color-danger: #c96b52;
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-primary) 35%, transparent);
+    color: var(--color-foreground);
+  }
+}
