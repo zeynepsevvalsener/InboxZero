@@ -10,9 +10,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN chmod +x scripts/start-api.sh
-
-EXPOSE 8000
-
-# Migrations + API. docker-compose worker overrides via Dockerfile.worker / command.
-CMD ["./scripts/start-api.sh"]
+CMD ["celery", "-A", "app.worker.celery_app", "worker", "--beat", "--loglevel=info", "--concurrency=3"]

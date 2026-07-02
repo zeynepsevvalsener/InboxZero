@@ -1,4 +1,4 @@
-from pydantic import AliasChoices, Field
+from pydantic import AliasChoices, Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -7,6 +7,17 @@ class Settings(BaseSettings):
 
     database_url: str = "postgresql+psycopg://inboxzero:inboxzero@postgres:5432/inboxzero"
     redis_url: str = "redis://redis:6379/0"
+
+    @field_validator("database_url")
+    @classmethod
+    def _use_psycopg3_driver(cls, value: str) -> str:
+        """Normalize managed-Postgres URLs (Render/Neon/Heroku give ``postgres://`` or
+        ``postgresql://``) to the psycopg v3 driver this project ships with."""
+        if value.startswith("postgres://"):
+            value = "postgresql://" + value[len("postgres://"):]
+        if value.startswith("postgresql://"):
+            value = "postgresql+psycopg://" + value[len("postgresql://"):]
+        return value
 
     jwt_secret: str = Field(
         default="change-me",
